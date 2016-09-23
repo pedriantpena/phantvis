@@ -79,7 +79,7 @@ function handleData(data, status) {
     $('#result').toggleClass('hidden', false);
     $('#result').toggleClass('alert-success', false);
     $('#result').toggleClass('alert-danger', false);
-    $('#result').append('<p>Bookmark this chart <a href=./#' + key + '>here</a></p>');
+    $('#result').append('<p>Bookmark this chart <a href=./' + window.location.hash + '>here</a></p>');
 
     var chartData = processData(data);
 
