@@ -67,7 +67,7 @@ function processData(dataIn) {
 }
 
 // Display data
-function handleData(data, status) {
+function handleData(key, data, status) {
 
     $("#loading").toggleClass('hidden', true);
     $("#plotDiv").toggleClass('hidden', false);
@@ -76,12 +76,19 @@ function handleData(data, status) {
         return handleError(status);
     }
 
+    $('#result').empty();
     $('#result').toggleClass('hidden', false);
     $('#result').toggleClass('alert-success', false);
     $('#result').toggleClass('alert-danger', false);
-    $('#result').append('<p>Bookmark this chart <a href=./' + window.location.hash + '>here</a></p>');
+    $('#result').append('<p>Check out the raw stream <a href="https://data.sparkfun.com/streams/' + key + '">here</a> or bookmark this chart <a href=./#' + key + '>here</a></p>');
 
     var chartData = processData(data);
+
+    Highcharts.setOptions({
+        global : {
+            useUTC : false
+        }
+    });
 
     let chart = $('#plot').highcharts({
         chart: {
@@ -136,6 +143,7 @@ function handleData(data, status) {
 function handleError(error) {
     $('#loading').toggleClass('hidden', true);
     $('#result').toggleClass('hidden', false);
+    $('#result').empty();
     $('#result').toggleClass('alert-success', false);
     $('#result').toggleClass('alert-danger', true);
     $('#result').append('<p>error :' + error + ' fetching data</p>');
@@ -158,7 +166,9 @@ var generatePlot = function generatePlot(e) {
     // Fetch JSON data
     let url = 'https://data.sparkfun.com/output/' + key + '.json';
 
-    $.getJSON(url, handleData)
+    $.getJSON(url, function(data, status) {
+        handleData(key, data, status);
+    })
     .fail(function(error) {
         console.log(error);
         handleError(error.statusText)
