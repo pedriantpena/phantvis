@@ -146,7 +146,7 @@ function handleError(error) {
     $('#result').empty();
     $('#result').toggleClass('alert-success', false);
     $('#result').toggleClass('alert-danger', true);
-    $('#result').append('<p>error :' + error + ' fetching data</p>');
+    $('#result').append('<p>error fetching data (' + error + ')</p>');
 }
 
 // Form logic
