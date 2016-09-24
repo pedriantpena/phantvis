@@ -45,7 +45,6 @@ function processData(dataIn) {
             }
             datasets.push(dataset)
             let axis = {
-                gridLineWidth: 0,
                 labels: {
                     format: '{value}',
                 },
@@ -105,6 +104,9 @@ function handleData(key, data, status) {
         series: chartData.datasets,
         tooltip: {
             shared: true
+        },
+        exporting: {
+            enabled: true
         },
         rangeSelector: {
             enabled: true,
