@@ -66,7 +66,7 @@ function processData(dataIn) {
 }
 
 // Display data
-function handleData(key, data, status) {
+function handleData(key, info, data, status) {
 
     $("#loading").toggleClass('hidden', true);
     $("#plotDiv").toggleClass('hidden', false);
@@ -95,7 +95,7 @@ function handleData(key, data, status) {
             zoomType: 'x'
         },
         title: {
-            text: 'Phantvis'
+            text: info.title
         },
         xAxis: {
             type: 'datetime'
@@ -165,13 +165,22 @@ var generatePlot = function generatePlot(e) {
     // Display loading animation
     $("#loading").toggleClass('hidden', false);
 
-    // Fetch JSON data
-    let url = 'https://data.sparkfun.com/output/' + key + '.json';
+    // Fetch JSON info & data
+    let infoUrl = 'https://data.sparkfun.com/streams/' + key + '.json';
+    let dataUrl = 'https://data.sparkfun.com/output/' + key + '.json';
 
-    $.getJSON(url, function(data, status) {
-        handleData(key, data, status);
-    })
-    .fail(function(error) {
+    $.ajax({url: infoUrl, dataType: "jsonp", success: console.log})
+
+    $.getJSON(infoUrl, function(info, status) {
+        $.getJSON(dataUrl, function(data, status) {
+            handleData(key, info, data, status);
+        })
+        .fail(function(error) {
+            console.log(error);
+            handleError(error.statusText)
+        });
+
+    }).fail(function(error) {
         console.log(error);
         handleError(error.statusText)
     });
